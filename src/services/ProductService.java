@@ -4,6 +4,7 @@ import entities.Category;
 import entities.Product;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -12,19 +13,38 @@ public class ProductService {
     private final List<Product> products;
     private final CategoryService categoryService;
 
-    public ProductService(Scanner scanner,
-                          List<Product> products,
-                          CategoryService categoryService) {
-        this.scanner = scanner;
-        this.products = products;
-        this.categoryService = categoryService;
+    public ProductService() {
+
+        this.scanner = new Scanner(System.in);
+        this.products = new ArrayList<>();
+        this.categoryService = new CategoryService();
+        addInitialProducts();
+    }
+
+    private void addInitialProducts() {
+        Category defaultCategory = categoryService.getAll("CREATE","DESC").get(0);
+
+        String[] names = {"Smartphone", "Laptop", "Headphones", "T-shirt", "Sneakers", "Watch", "Book", "Toy", "Camera", "Home Decor"};
+        String[] titles = {"High-end Smartphone", "Premium Laptop", "Wireless Headphones", "Cotton T-shirt", "Sporty Sneakers", "Luxury Watch", "Bestseller Book", "Educational Toy", "Professional Camera", "Decorative Lamp"};
+        String[] descriptions = {"The latest flagship smartphone with advanced features.", "Powerful laptop for professional use.", "Immersive sound quality with noise cancellation.", "Comfortable and stylish cotton t-shirt.", "Durable sneakers for active lifestyle.", "Elegant watch with precision timekeeping.", "Bestselling book with captivating story.", "Educational toy for kids' development.", "High-resolution camera for photography enthusiasts.", "Unique home decor item to enhance your living space."};
+
+        for (int i = 0; i < 10; i++) {
+            String name = names[i];
+            String title = titles[i];
+            String description = descriptions[i];
+            String dateAdded = LocalDate.now().toString();
+            BigDecimal price = BigDecimal.valueOf(new Random().nextDouble() * 1000).setScale(2, BigDecimal.ROUND_HALF_UP);
+            Product product = new Product(name, title, description, dateAdded, price, defaultCategory);
+            products.add(product);
+            defaultCategory.addProduct(product);
+        }
     }
 
     public List<Product> getAll(String sortBy, String sortOrder) {
         Comparator<Product> comparator = null;
         boolean isDesc = sortOrder.equalsIgnoreCase("desc");
 
-        switch (sortBy.toLowerCase()) {
+        switch (sortBy.toUpperCase()) {
             case "CREATE" -> comparator = Comparator.comparing(Product::getCreateDate);
             case "PRICE" -> comparator = Comparator.comparing(Product::getPrice);
             default -> {
@@ -58,8 +78,15 @@ public class ProductService {
         }
         Product product = new Product();
         product.input(category);
-        scanner.next();
         products.add(product);
+    }
+
+    public Optional<Product> findById(Long id) {
+        return products.stream()
+                .filter(product -> product.getId().equals(id)
+                        && product.getActive()
+                        && product.getCategory().getActive())
+                .findFirst();
     }
 
     public List<Product> findByName(String name) {
@@ -68,7 +95,6 @@ public class ProductService {
                         && product.getActive()
                         && product.getCategory().getActive())
                 .collect(Collectors.toList());
-
     }
 
     public List<Product> findByCode(String code) {

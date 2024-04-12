@@ -1,7 +1,5 @@
 package entities;
 
-import java.util.Date;
-
 public class User extends BaseEntity {
     private String username;
     private String password;
@@ -104,17 +102,17 @@ public class User extends BaseEntity {
 
     private void inputOverload() {
         System.out.println("Nhập tài khoản: ");
-        this.username = scanner.next();
+        this.username = scanner.nextLine();
         System.out.println("Nhập mật khẩu: ");
-        this.password = scanner.next();
+        this.password = scanner.nextLine();
         System.out.println("Nhập tên đầy đủ: ");
-        this.fullName = scanner.next();
+        this.fullName = scanner.nextLine();
         System.out.println("Nhập email: ");
-        this.email = scanner.next();
+        this.email = scanner.nextLine();
         System.out.println("Nhập số điện thoại: ");
-        this.phone = scanner.next();
+        this.phone = scanner.nextLine();
         System.out.println("Nhập địa chỉ: ");
-        this.address = scanner.next();
+        this.address = scanner.nextLine();
     }
 
     @Override

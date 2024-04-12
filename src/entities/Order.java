@@ -1,5 +1,6 @@
 package entities;
 
+import enums.OrderStatus;
 import enums.ShippingRule;
 import enums.Status;
 import utils.CurrencyUtils;
@@ -18,6 +19,7 @@ public class Order extends BaseEntity {
     private String address;
     private ShippingRule shippingRule;
     private String note;
+    private OrderStatus orderStatus = OrderStatus.P;
 
     public String getCode() {
         return code;
@@ -83,6 +85,14 @@ public class Order extends BaseEntity {
         this.note = note;
     }
 
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
     public Order(Product product, Carts carts, String address, ShippingRule shippingRule, String note) {
         int randomNumber = random.nextInt(1000000);
         this.code = String.format("%07d", randomNumber);
@@ -119,6 +129,7 @@ public class Order extends BaseEntity {
         outputBuilder.append("  Sản phẩm: ").append(product).append("\n");
         outputBuilder.append("  Giỏ hàng: ").append(carts.getProducts().toString()).append("\n");
         outputBuilder.append("  Trạng thái đơn hàng: ").append(!Objects.isNull(status) ? status.getValue() : null).append("\n");
+        outputBuilder.append("  Trạng thái giao đơn hàng: ").append(!Objects.isNull(orderStatus) ? orderStatus.getValue() : null).append("\n");
         outputBuilder.append("  Đơn vị ship hàng: ").append(!Objects.isNull(shippingRule) ? shippingRule.getValue() : null).append("\n");
         outputBuilder.append("  Địa chỉ: ").append(address).append("\n");
         outputBuilder.append("  Ghi chú: ").append(note).append("\n");

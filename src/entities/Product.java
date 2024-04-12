@@ -1,5 +1,7 @@
 package entities;
 
+import utils.CurrencyUtils;
+
 import java.math.BigDecimal;
 import java.util.Random;
 
@@ -104,7 +106,6 @@ public class Product extends BaseEntity {
     public void input(Category category) {
         inputOverloading();
         this.category = category;
-        scanner.next();
     }
 
     private void inputOverloading() {
@@ -130,7 +131,8 @@ public class Product extends BaseEntity {
         outputBuilder.append("  Tiêu đề sản phẩm: ").append(title).append("\n");
         outputBuilder.append("  Mô tả sản phẩm: ").append(description).append("\n");
         outputBuilder.append("  Ngày nhập sản phẩm: ").append(dateAdded).append("\n");
-        outputBuilder.append("  Giá sản phẩm: ").append(price).append("\n");
+        outputBuilder.append("  Giá sản phẩm: ").append(CurrencyUtils.formatCurrencyVietnam(price)).append("\n");
+        outputBuilder.append("  Loại sản phẩm: ").append(category.output()).append("\n");
         return outputBuilder.toString();
     }
 }

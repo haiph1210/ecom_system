@@ -1,10 +1,8 @@
-import entities.Category;
-import entities.User;
+import front_end.Screen;
 
 public class Main {
     public static void main(String[] args) {
-        Category category = new Category();
-        category.input();
-        System.out.println("category.output() = " + category.output());
+        Screen screenAdmin = new Screen();
+        screenAdmin.auth();
     }
 }

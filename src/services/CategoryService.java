@@ -4,24 +4,34 @@ import entities.Category;
 import entities.Product;
 import handle.ProductHandle;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class CategoryService extends BaseService {
-    private List<Category> categories;
-    private ProductHandle productHandle;
+    private final List<Category> categories;
 
-    public CategoryService(List<Category> categories) {
-        this.categories = categories;
+    public CategoryService() {
+        this.categories = new ArrayList<>();
+        this.initData();
+    }
+
+    private void initData() {
+        String[] names = {"Điện tử", "Thời trang", "Sách", "Nội thất", "Đồ chơi"};
+
+        for (String name : names) {
+            Category category = new Category(name,null);
+            categories.add(category);
+        }
     }
 
     public List<Category> getAll(String sortBy, String sortOrder) {
         Comparator<Category> comparator = null;
         boolean isDesc = sortOrder.equalsIgnoreCase("desc");
 
-        switch (sortBy.toLowerCase()) {
+        switch (sortBy.toUpperCase()) {
             case "CREATE" -> comparator = Comparator.comparing(Category::getCreateDate);
             default -> {
                 System.out.println("Lựa chọn không hợp lệ. Danh sách sẽ không được sắp xếp.");
@@ -35,10 +45,11 @@ public class CategoryService extends BaseService {
                 .collect(Collectors.toList());
     }
 
-    public void addCategory() {
+    public Category addCategory() {
         Category category = new Category();
         category.input();
         categories.add(category);
+        return category;
     }
 
     public List<Category> findByName(String name) {
@@ -64,7 +75,7 @@ public class CategoryService extends BaseService {
                 .collect(Collectors.toList());
     }
 
-    public void changeStatusRecordByCode(String code, boolean isActive) {
+    public String changeStatusRecordByCode(String code, boolean isActive) {
         List<Category> getCategoryByCode;
         if (code.contains(",")) {
             List<String> codes = List.of(code.split(","));
@@ -78,6 +89,7 @@ public class CategoryService extends BaseService {
                 category.setActive(isActive);
             }
         }
+        return "Thay đổi trạng thái thành công";
     }
 
     public String update(Category category) {

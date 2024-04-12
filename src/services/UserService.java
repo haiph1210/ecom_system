@@ -1,23 +1,49 @@
 package services;
 
+import entities.Category;
 import entities.User;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class UserService extends BaseService {
-    private List<User> users;
+    private final List<User> users;
 
-    public UserService(List<User> users) {
-        this.users = users;
+    public UserService() {
+        this.users = new ArrayList<>();
+        User admin = new User("admin", "admin", "admin", "admin123@gmail.com", "0999999999", "Hà Nội", "ADMIN");
+        User user = new User("user01", "user01", "user01", "user01@gmail.com", "0999999998", "Hồ Chí Minh", "USER");
+        this.users.addAll(Arrays.asList(admin,user));
+    }
+
+    public User login(String username, String password) {
+        Optional<User> first = users.stream()
+                .filter(item -> item.getUsername().equals(username.trim())
+                        && item.getPassword().equals(password.trim()))
+                .findFirst();
+        if (first.isPresent()) {
+            return first.get();
+        }
+        System.out.println("Tên đăng nhập hoặc mật khẩu không đúng.");
+        return null;
     }
 
     public List<User> getAll(String sortBy, String sortOrder) {
-        return null;
+        Comparator<User> comparator = null;
+        boolean isDesc = sortOrder.equalsIgnoreCase("desc");
+
+        switch (sortBy.toLowerCase()) {
+            case "FULLNAME" -> comparator = Comparator.comparing(User::getFullName);
+            default -> {
+                System.out.println("Lựa chọn không hợp lệ. Danh sách sẽ không được sắp xếp.");
+                return users;
+            }
+        }
+
+        return users.stream()
+                .sorted(isDesc ? comparator.reversed() : comparator)
+                .collect(Collectors.toList());
     }
 
     public void createAdmin() {
@@ -52,8 +78,8 @@ public class UserService extends BaseService {
         }
     }
 
-    public void changePassword(String username, String email,
-                               String phone, String newPassword) {
+    public String changePassword(String username, String email,
+                                 String phone, String newPassword) {
         Optional<User> oUser = users.stream()
                 .filter(item -> item.isActive()
                         && item.getUsername().equals(username)
@@ -64,8 +90,9 @@ public class UserService extends BaseService {
         if (oUser.isPresent()) {
             User user = oUser.get();
             user.setPassword(newPassword);
+            return "Thay dổi mật khẩu thành công";
         } else {
-            System.out.println("Không tìm thấy người dùng, thay đổi mật khẩu thất bại");
+            return ("Không tìm thấy người dùng, thay đổi mật khẩu thất bại");
         }
     }
 

@@ -1,22 +1,27 @@
 package handle;
 
 import entities.Product;
+import services.CartsService;
 import services.ProductService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class ProductHandle {
     Scanner scanner = new Scanner(System.in);
-    private ProductService productService;
+    private final ProductService productService;
 
-    public ProductHandle(ProductService productService) {
-        this.productService = productService;
+    private final CartsService cartsService;
+
+    public ProductHandle() {
+        this.productService = new ProductService();
+        this.cartsService = new CartsService();
     }
 
     public List<String> getAllByCreate() {
-        return productService.getAll("CREATE", "DESC").stream().map(Product::output).collect(Collectors.toList());
+        return productService.getAll("CREATE", "desc").stream().map(Product::output).collect(Collectors.toList());
     }
 
     public List<String> getAllByPrice() {
@@ -26,7 +31,6 @@ public class ProductHandle {
     public void addProduct() {
         System.out.println("Nhập số sản phẩm muốn thêm:");
         int count = scanner.nextInt();
-        scanner.next();
         this.productService.addProducts(count);
     }
 
@@ -53,6 +57,19 @@ public class ProductHandle {
         Long id = scanner.nextLong();
         scanner.next();
         this.productService.remove(id);
+    }
+
+    public String addToCart() {
+        System.out.println("Nhập ID đưa vào giỏ hàng:");
+        Long id = scanner.nextLong();
+        System.out.println("Nhập số lượng:");
+        Integer amount = scanner.nextInt();
+        Optional<Product> product = productService.findById(id);
+        if (product.isPresent()) {
+            return cartsService.addProduct(product.get(),amount).output();
+        } else {
+            return "ID không tồn tại hoặc sản phẩm chưa hoạt động";
+        }
     }
 }
 
