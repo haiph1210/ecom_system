@@ -46,7 +46,6 @@ public class CartsManager {
                 default:
                     System.out.println("Lựa chọn không hợp lệ. Vui lòng nhập số từ 1 đến 5.");
             }
-            scanner.close();
         }
     }
 }

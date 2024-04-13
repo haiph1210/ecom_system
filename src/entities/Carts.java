@@ -5,6 +5,8 @@ import utils.CurrencyUtils;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Carts extends BaseEntity {
     private List<Product> products = new ArrayList<>();
@@ -12,15 +14,19 @@ public class Carts extends BaseEntity {
     private BigDecimal totalPrice;
 
     public Carts() {
+        this.products = new ArrayList<>();
+        this.amount = 0;
     }
 
     public Carts(List<Product> products, Integer amount) {
-        this.products = products;
-        this.amount = amount;
-        this.totalPrice = products.stream()
+        this.products = !Objects.isNull(products) ? products : new ArrayList<>();
+        this.amount = !Objects.isNull(amount) ? amount : 0;
+        this.totalPrice = !Objects.isNull(products)
+                ? products.stream()
                 .map(Product::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
-                .multiply(BigDecimal.valueOf(amount));
+                .multiply(BigDecimal.valueOf(amount))
+                : BigDecimal.ZERO;
     }
 
     public List<Product> getProducts() {
@@ -57,9 +63,11 @@ public class Carts extends BaseEntity {
         StringBuilder outputBuilder = new StringBuilder();
         outputBuilder.append("  Thông tin giỏ hàng: \n");
         outputBuilder.append(super.output());
-        outputBuilder.append("  Sản phẩm trong giỏ hàng: ").append(products.toString()).append("\n");
         outputBuilder.append("  Số lượng: ").append(amount).append("\n");
         outputBuilder.append("  Tổng tiền: ").append(CurrencyUtils.formatCurrencyVietnam(totalPrice)).append("\n");
+        outputBuilder.append("  Sản phẩm trong giỏ hàng: ").append(!Objects.isNull(products)
+                ? products.stream().map(Product::output).collect(Collectors.toList())
+                : "").append("\n");
         return outputBuilder.toString();
     }
 }

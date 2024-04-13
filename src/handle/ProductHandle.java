@@ -34,22 +34,33 @@ public class ProductHandle {
         this.productService.addProducts(count);
     }
 
-    public void changeActiveStatusByCode() {
+    public String changeActiveStatusByCode() {
         System.out.println("Nhập code muốn tìm kiếm:");
         String code = scanner.nextLine();
-        this.productService.changeStatusByCode(code, true);
+        return this.productService.changeStatusByCode(code, true);
     }
 
-    public void changeInActiveStatusByCode() {
+    public String changeInActiveStatusByCode() {
         System.out.println("Nhập code muốn tìm kiếm:");
         String code = scanner.nextLine();
-        this.productService.changeStatusByCode(code, false);
+        return this.productService.changeStatusByCode(code, false);
     }
 
     public List<String> getProductByName() {
         System.out.println("Nhập tên sản phẩm muốn tìm kiếm:");
         String name = scanner.nextLine();
         return this.productService.findByName(name).stream().map(Product::output).collect(Collectors.toList());
+    }
+
+    public String update() {
+        System.out.println("Nhập ID Sản phẩm muốn sửa đổi:");
+        Long id = scanner.nextLong();
+        Optional<Product> product = productService.findById(id);
+        if (product.isPresent()) {
+            return productService.updateProduct(product.get());
+        } else {
+            return "ID sản phẩm không tồn tại,update không thành công";
+        }
     }
 
     public void removeProduct() {
@@ -66,7 +77,7 @@ public class ProductHandle {
         Integer amount = scanner.nextInt();
         Optional<Product> product = productService.findById(id);
         if (product.isPresent()) {
-            return cartsService.addProduct(product.get(),amount).output();
+            return cartsService.addProduct(product.get(), amount).output();
         } else {
             return "ID không tồn tại hoặc sản phẩm chưa hoạt động";
         }

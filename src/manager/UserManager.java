@@ -66,7 +66,7 @@ public class UserManager {
 
             switch (choice) {
                 case 1:
-                    System.out.println(userHandle.resetPassword());
+                    System.out.println(userHandle.resetPassword(id));
                     break;
                 case 2:
                     System.out.println(userHandle.getProfile(id));
@@ -82,5 +82,17 @@ public class UserManager {
                     break;
             }
         }
+    }
+
+    public void contacUs() {
+        System.out.println("================================================");
+        System.out.println("            LIÊN HỆ VỚI QUẢN TRỊ VIÊN           ");
+        System.out.println("================================================");
+        User user = userHandle.getProfileAdmin();
+        System.out.println(String.format("%s: %s                                       ", "Tên quản trị viên", user.getFullName()));
+        System.out.println(String.format("%s: %s                                       ", "Email quản trị viên", user.getEmail()));
+        System.out.println(String.format("%s: %s                                       ", "Số điện thoại quản trị viên", user.getPhone()));
+        System.out.println("Hãy liên hệ với chúng tôi");
+
     }
 }

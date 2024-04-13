@@ -56,7 +56,6 @@ public class OrderManager {
                 default:
                     System.out.println("Lựa chọn không hợp lệ. Vui lòng nhập số từ 1 đến 8.");
             }
-            scanner.close();
         }
     }
 }

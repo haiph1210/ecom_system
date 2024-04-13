@@ -43,7 +43,7 @@ public class Screen {
                     System.out.println("================================================");
                     System.out.println("                  ĐĂNG KÝ                      ");
                     System.out.println("================================================");
-                    authenService.createUser();
+                    System.out.println(authenService.createUser());
                     break;
                 case 2:
                     System.out.println("================================================");
@@ -136,13 +136,13 @@ public class Screen {
                     cartsManager.cartManager();
                     break;
                 case 4:
-//                    orderManager.
+                    userManager.contacUs();
                     break;
                 case 5:
                     userManager.userManager(id);
                     break;
                 case 6:
-
+                    System.out.println("Hệ thống đang nâng cấp tính năng này");
                     break;
                 case 0:
                     System.out.println("Đăng xuất.");

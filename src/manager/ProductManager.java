@@ -38,11 +38,12 @@ public class ProductManager {
                     productHandle.addProduct();
                     break;
                 case 3:
-//                    productHandle.getProductByName();
+                    System.out.println(productHandle.update());
+//                    System.out.println("Chức năng đang trong quá trình nâng caps");
                     break;
                 case 4:
                 case 5:
-                    productHandle.changeInActiveStatusByCode();
+                    System.out.println(productHandle.changeInActiveStatusByCode());
                     break;
                 case 6:
                     System.out.println(productHandle.getProductByName());

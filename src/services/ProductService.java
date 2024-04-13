@@ -22,7 +22,7 @@ public class ProductService {
     }
 
     private void addInitialProducts() {
-        Category defaultCategory = categoryService.getAll("CREATE","DESC").get(0);
+        Category defaultCategory = categoryService.getAll("CREATE", "DESC").get(0);
 
         String[] names = {"Smartphone", "Laptop", "Headphones", "T-shirt", "Sneakers", "Watch", "Book", "Toy", "Camera", "Home Decor"};
         String[] titles = {"High-end Smartphone", "Premium Laptop", "Wireless Headphones", "Cotton T-shirt", "Sporty Sneakers", "Luxury Watch", "Bestseller Book", "Educational Toy", "Professional Camera", "Decorative Lamp"};
@@ -91,9 +91,10 @@ public class ProductService {
 
     public List<Product> findByName(String name) {
         return products.stream()
-                .filter(product -> product.getCode().equals(name)
+                .filter(product -> product.getName().equals(name)
                         && product.getActive()
-                        && product.getCategory().getActive())
+                        && product.getCategory().getActive()
+                )
                 .collect(Collectors.toList());
     }
 
@@ -113,7 +114,8 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    public void changeStatusByCode(String code, Boolean isActive) {
+    public String changeStatusByCode(String code, Boolean isActive) {
+        String resp = "";
         List<Product> getProductByCode;
         if (code.contains(",")) {
             List<String> codes = List.of(code.split(","));
@@ -126,7 +128,11 @@ public class ProductService {
             for (Product product : getProductByCode) {
                 product.setActive(isActive);
             }
+            resp = "Cập nhật trạng thái thành công";
+        } else {
+            resp = "Cập nhật trạng thái không thành công,không tồn tại code bạn tìm kiếm";
         }
+        return resp;
     }
 
     public String updateProduct(Product product) {

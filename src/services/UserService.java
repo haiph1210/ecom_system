@@ -12,9 +12,13 @@ public class UserService extends BaseService {
 
     public UserService() {
         this.users = new ArrayList<>();
-        User admin = new User("admin", "admin", "admin", "admin123@gmail.com", "0999999999", "Hà Nội", "ADMIN");
-        User user = new User("user01", "user01", "user01", "user01@gmail.com", "0999999998", "Hồ Chí Minh", "USER");
-        this.users.addAll(Arrays.asList(admin,user));
+        initData();
+    }
+
+    private void initData() {
+        User admin = new User(1L,"admin", "admin", "admin", "admin123@gmail.com", "0999999999", "Hà Nội", "ADMIN");
+        User user = new User(2L,"user01", "user01", "user01", "user01@gmail.com", "0999999998", "Hồ Chí Minh", "USER");
+        this.users.addAll(Arrays.asList(admin, user));
     }
 
     public User login(String username, String password) {
@@ -46,14 +50,18 @@ public class UserService extends BaseService {
                 .collect(Collectors.toList());
     }
 
-    public void createAdmin() {
+    public String createAdmin() {
         User user = new User();
         user.input("ADMIN");
+        users.add(user);
+        return user.output();
     }
 
-    public void createUser() {
+    public String createUser() {
         User user = new User();
         user.input("USER");
+        users.add(user);
+        return user.output();
     }
 
     public List<User> findByFullName(String fullName) {
@@ -68,6 +76,22 @@ public class UserService extends BaseService {
                 .findFirst();
         return userOptional.orElse(null);
     }
+    public User getAdmin() {
+        Optional<User> userOptional = users.stream()
+                .filter(user -> user.getRole().equals("ADMIN"))
+                .findFirst();
+        return userOptional.orElse(null);
+    }
+
+    public User findByUsernameAndEmailAndPhone(String username, String email, String phone) {
+        Optional<User> userOptional = users.stream()
+                .filter(user -> user.getUsername().equals(username)
+                        && user.getEmail().equals(email)
+                        && user.getPhone().equals(phone)
+                )
+                .findFirst();
+        return userOptional.orElse(null);
+    }
 
     public void changeStatus(Long id, boolean isActive) {
         User oldUser = findById(id);
@@ -78,6 +102,16 @@ public class UserService extends BaseService {
         }
     }
 
+    public String changePassword(Long id, String newPassword) {
+        Optional<User> userOptional = Optional.ofNullable(findById(id));
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setPassword(newPassword);
+            return "Thay đổi mật khẩu thành công";
+        } else {
+            return "Không tìm thấy người dùng, thay đổi mật khẩu thất bại";
+        }
+    }
     public String changePassword(String username, String email,
                                  String phone, String newPassword) {
         Optional<User> oUser = users.stream()

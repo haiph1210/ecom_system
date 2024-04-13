@@ -82,9 +82,20 @@ public class UserHandle {
         String newPassword = scanner.nextLine();
         return userService.changePassword(username, email, phone, newPassword);
     }
+    public String resetPassword(Long id) {
+        System.out.println("Nhập mật khẩu mới: ");
+        String newPassword = scanner.nextLine();
+        return userService.changePassword(id, newPassword);
+    }
 
     public String getProfile(Long id) {
         return userService.findById(id).output();
+    }
+    public User getProfileAdmin() {
+        return userService.getAdmin();
+    }
+    public String getProfile(String username, String email, String phone) {
+        return userService.findByUsernameAndEmailAndPhone(username, email, phone).output();
     }
 
     public String update(Long id) {

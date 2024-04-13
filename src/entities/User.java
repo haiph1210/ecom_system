@@ -24,7 +24,20 @@ public class User extends BaseEntity {
         this.phone = phone;
         this.address = address;
         this.role = role;
-        this.isActive = false;
+        this.isActive = true;
+    }
+
+    public User(Long id, String username, String password, String fullName, String email, String phone, String address, String role) {
+        super();
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.fullName = fullName;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+        this.role = role;
+        this.isActive = true;
     }
 
     public String getUsername() {
@@ -95,6 +108,7 @@ public class User extends BaseEntity {
     public void input() {
         inputOverload();
     }
+
     public void input(String role) {
         inputOverload();
         this.role = role;

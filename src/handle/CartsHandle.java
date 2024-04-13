@@ -22,27 +22,35 @@ public class CartsHandle {
     }
 
     public String changeAmount() {
+        String resp = "";
         System.out.println("Nhập id giỏ hàng muốn thêm số lượng: ");
         Long id = scanner.nextLong();
-        scanner.next();
+//        scanner.next();
         System.out.println("Nhập số lượng chỉnh sửa: ");
         Integer amount = scanner.nextInt();
-        scanner.next();
-        return cartsService.changeAmount(id, amount).output();
+//        scanner.next();
+        if (cartsService.changeAmount(id, amount) != null) {
+            resp = cartsService.changeAmount(id, amount).output();
+        } else {
+            resp = "Thay đổi số lượng giỏ hàng không thành công, giỏ hàng bạn tìm không tồn tại";
+        }
+        return resp;
+
     }
 
     public String remove() {
         System.out.println("Nhập id giỏ hàng muốn xóa: ");
         Long id = scanner.nextLong();
-        scanner.next();
+//        scanner.next();
         return cartsService.remove(id) ? "Xóa giỏ hàng thành công" : "Xóa giỏ hàng thất bại";
     }
 
     public String order() {
         System.out.println("Nhập id giỏ hàng thanh toán: ");
         Long id = scanner.nextLong();
-        scanner.next();
+//        scanner.next();
         System.out.println("Nhập địa chỉ nhận hàng: ");
+        scanner.next();
         String address = scanner.nextLine();
         System.out.println("Nhập ghi chú: ");
         String note = scanner.nextLine();

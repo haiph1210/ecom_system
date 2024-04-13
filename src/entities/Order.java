@@ -8,6 +8,7 @@ import utils.CurrencyUtils;
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class Order extends BaseEntity {
     Random random = new Random();
@@ -103,7 +104,7 @@ public class Order extends BaseEntity {
         }
         if (!Objects.isNull(carts)) {
             this.carts = carts;
-            totalPrice = product.getPrice();
+            totalPrice = carts.getTotalPrice();
         }
         this.address = address;
         BigDecimal shippingFee = BigDecimal.ZERO;
@@ -126,11 +127,12 @@ public class Order extends BaseEntity {
         outputBuilder.append("  Thông tin đơn hàng: \n");
         outputBuilder.append(super.output());
         outputBuilder.append("  Mã đơn hàng: ").append(code).append("\n");
-        outputBuilder.append("  Sản phẩm: ").append(product).append("\n");
-        outputBuilder.append("  Giỏ hàng: ").append(carts.getProducts().toString()).append("\n");
+        outputBuilder.append("  Sản phẩm: ").append(!Objects.isNull(product) ? product.output() : "").append("\n");
+        outputBuilder.append("  Giỏ hàng: ").append(!Objects.isNull(carts) ? carts.getProducts().stream().map(Product::output).collect(Collectors.toList()) : "").append("\n");
         outputBuilder.append("  Trạng thái đơn hàng: ").append(!Objects.isNull(status) ? status.getValue() : null).append("\n");
         outputBuilder.append("  Trạng thái giao đơn hàng: ").append(!Objects.isNull(orderStatus) ? orderStatus.getValue() : null).append("\n");
         outputBuilder.append("  Đơn vị ship hàng: ").append(!Objects.isNull(shippingRule) ? shippingRule.getValue() : null).append("\n");
+        outputBuilder.append("  Phí ship hàng: ").append(!Objects.isNull(shippingRule) ? CurrencyUtils.formatCurrencyVietnam(shippingRule.getShippingFee()) : null).append("\n");
         outputBuilder.append("  Địa chỉ: ").append(address).append("\n");
         outputBuilder.append("  Ghi chú: ").append(note).append("\n");
         outputBuilder.append("  Tổng đơn hàng: ").append(CurrencyUtils.formatCurrencyVietnam(totalPrice)).append("\n");
